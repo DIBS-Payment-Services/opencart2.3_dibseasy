@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <name>Dibs Easy Payment Modification</name>
+  <code>default</code>
+  <version>1.0</version>
+  <author>DIBS</author>
+  <link>http://www.opencart.com</link>
+  <file path="catalog/controller/checkout/checkout.php">
+	<operation>
+      <search trim="true|false">
+        <![CDATA[public function index() {]]>
+      </search>
+      <add position="after" offset="0">
+        <![CDATA[$this->load->model('setting/setting'); 
+           $settings = $this->model_setting_setting->getSetting('dibseasy');
+           if(isset($settings['dibseasy_status']) && $settings['dibseasy_status'] == 1) {
+           $this->response->redirect($this->url->link('checkout/dibseasy', '', true));}]]>
+      </add>
+    </operation>
+  </file>
+</modification>
