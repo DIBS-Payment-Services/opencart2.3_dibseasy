@@ -19,7 +19,7 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                         $response = $this->model_extension_payment_dibseasy->getTransactionInfo($_GET['paymentId']);
                         $maskedCardNumber = $response->payment->paymentDetails->cardDetails->maskedPan;
                         $cardPostfix = substr($maskedCardNumber, -4);
-                        if( $response ) {
+                        if($response->payment->paymentDetails->paymentType) {
                             $_SESSION['dibseasy_transaction'] = $_GET['paymentId'];
                             $res = $this->model_extension_payment_dibseasy->getCountryByIsoCode3($response->payment->consumer->shippingAddress->country);
                             $country = $res['name'];
@@ -74,11 +74,11 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                             $this->logger->write('Orderid: ' . $this->session->data['order_id']);
                             $this->logger->write('You can fing order details in DB table: `' . DB_PREFIX . 'order`');
                             $this->logger->write('================================================================');
-                            $this->response->redirect($this->url->link('common/home', '', true));
+                            $this->response->redirect($this->url->link('checkout/dibseasy', '', true));
                         }
                         
 		} else {
-                    $this->response->redirect($this->url->link('common/home', '', true));
+                    $this->response->redirect($this->url->link('checkout/dibseasy', '', true));
                 }
 	}
 }
