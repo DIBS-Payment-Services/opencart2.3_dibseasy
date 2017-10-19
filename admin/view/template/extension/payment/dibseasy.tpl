@@ -144,13 +144,9 @@
               <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_language; ?></label>
             <div class="col-sm-10">
               <select name="dibseasy_language" id="input-language" class="form-control">
-                <?php if ($dibseasy_language == 'en-GB') { ?>
-                <option value="en-GB" selected="selected"><?php echo $text_english; ?></option>
-                <option value="sv-SE"><?php echo $text_swedish; ?></option>
-                <?php } else { ?>
-                <option value="en-GB"><?php echo $text_english; ?></option>
-                <option value="sv-SE" selected="selected"><?php echo $text_swedish; ?></option>
-                <?php } ?>
+                 <option value="en-GB" <?php echo $english_selected; ?> ><?php echo $text_english; ?></option>
+                 <option value="sv-SE" <?php echo $swedish_selected; ?> ><?php echo $text_swedish; ?></option>
+                 <option value="nb-NO" <?php echo $norwegian_select; ?> ><?php echo $text_norwegian; ?></option>
               </select>
             </div>
           </div>

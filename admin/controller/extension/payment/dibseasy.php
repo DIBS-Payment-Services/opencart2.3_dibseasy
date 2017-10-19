@@ -110,91 +110,109 @@ class ControllerExtensionPaymentDibseasy extends Controller {
 		} else {
 			$data['dibseasy_shipping_method'] = $this->config->get('dibseasy_shipping_method');
 		}
-                
+
                 if (isset($this->request->post['dibseasy_order_status_id'])) {
 			$data['dibseasy_order_status_id'] = $this->request->post['dibseasy_order_status_id'];
 		} else {
 			$data['dibseasy_order_status_id'] = $this->config->get('dibseasy_order_status_id');
 		}
-                
+
                 if (isset($this->request->post['dibseasy_order_status_id'])) {
 			$data['dibseasy_order_status_id'] = $this->request->post['dibseasy_order_status_id'];
 		} else {
 			$data['dibseasy_order_status_id'] = $this->config->get('dibseasy_order_status_id');
 		}
-                
+
                 if (isset($this->request->post['dibseasy_testmode'])) {
 			$data['dibseasy_testmode'] = $this->request->post['dibseasy_testmode'];
 		} else {
 			$data['dibseasy_testmode'] = $this->config->get('dibseasy_testmode');
 		}
-                
+
 		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
-		
+
 		if (isset($this->request->post['dibseasy_status'])) {
 			$data['dibseasy_status'] = $this->request->post['dibseasy_status'];
 		} else {
 			$data['dibseasy_status'] = $this->config->get('dibseasy_status');
 		}
-                
+
                 if (isset($this->request->post['dibseasy_debug'])) {
 			$data['dibseasy_debug'] = $this->request->post['dibseasy_debug'];
 		} else {
 			$data['dibseasy_debug'] = $this->config->get('dibseasy_debug');
 		}
-                
+
                 if (isset($this->request->post['dibseasy_livekey'])) {
 			$data['dibseasy_livekey'] = $this->request->post['dibseasy_livekey'];
 		} else {
 			$data['dibseasy_livekey'] = $this->config->get('dibseasy_livekey');
 		}
-           
+
                 if (isset($this->request->post['dibseasy_testkey'])) {
 			$data['dibseasy_testkey'] = $this->request->post['dibseasy_testkey'];
 		} else {
 			$data['dibseasy_testkey'] = $this->config->get('dibseasy_testkey');
 		}
-                
+
                 if (isset($this->request->post['dibseasy_language'])) {
 			$data['dibseasy_language'] = $this->request->post['dibseasy_language'];
 		} else {
 			$data['dibseasy_language'] = $this->config->get('dibseasy_language');
 		}
-          
+
 		$data['error_merchant'] = '';
                 if(isset($this->error['error_merchant'])) {
                     $data['error_merchant'] = $this->error['error_merchant']; 
                 }
-                
+
                 $data['free_shipping_disabled'] = '';
                 if(isset($this->error['free_shipping_disabled'])) {
                     $data['free_shipping_disabled'] = $this->error['free_shipping_disabled'];
                 }
-                
+
                 $data['checkout_key_test'] = '';
                 if(isset($this->error['checkout_key_test'])) {
                     $data['checkout_key_test'] = $this->error['checkout_key_test']; 
                 }
-                
+
                 $data['checkout_key_live'] = '';
                 if(isset($this->error['checkout_key_live'])) {
                     $data['checkout_key_live'] = $this->error['checkout_key_live']; 
                 }
-                
+
                 $data['dibseasy_livekey_error'] = '';
                 if(isset($this->error['dibseasy_livekey'])) {
                     $data['dibseasy_livekey_error'] = $this->error['dibseasy_livekey']; 
                 }
-                
+
                 $data['dibseasy_testkey_error'] = '';
                 if(isset($this->error['dibseasy_testkey'])) {
                     $data['dibseasy_testkey_error'] = $this->error['dibseasy_testkey']; 
                 }
                 $data['text_english'] = 'English';
                 $data['text_swedish'] = 'Swedish';
+                $data['text_norwegian'] = 'Norwegian';
+
+                $data['english_selected'] = '';
+                $data['swedish_selected'] = '';
+                $data['norwegian_select'] = '';
+
+                if($this->config->get('dibseasy_language') == 'sv-SE') {
+                   $data['swedish_selected'] = 'selected="selected"';
+                }
+
+                if($this->config->get('dibseasy_language') == 'en-GB') {
+                   $data['english_selected'] = 'selected="selected"';
+                }
+
+                if($this->config->get('dibseasy_language') == 'nb-NO') {
+                   $data['norwegian_select'] = 'selected="selected"';
+                }
+
                 $data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
