@@ -193,13 +193,16 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                 if(isset($this->error['dibseasy_testkey'])) {
                     $data['dibseasy_testkey_error'] = $this->error['dibseasy_testkey']; 
                 }
-                $data['text_english'] = 'English';
-                $data['text_swedish'] = 'Swedish';
-                $data['text_norwegian'] = 'Norwegian';
+
+                $data['text_english'] = $this->language->get('text_english');
+                $data['text_swedish'] = $this->language->get('text_swedish');
+                $data['text_norwegian'] = $this->language->get('text_norwegian');
+                $data['text_danish'] = $this->language->get('text_danish');
 
                 $data['english_selected'] = '';
                 $data['swedish_selected'] = '';
                 $data['norwegian_select'] = '';
+                $data['danish_select'] = '';
 
                 if($this->config->get('dibseasy_language') == 'sv-SE') {
                    $data['swedish_selected'] = 'selected="selected"';
@@ -211,6 +214,10 @@ class ControllerExtensionPaymentDibseasy extends Controller {
 
                 if($this->config->get('dibseasy_language') == 'nb-NO') {
                    $data['norwegian_select'] = 'selected="selected"';
+                }
+
+                if($this->config->get('dibseasy_language') == 'da-DK') {
+                   $data['danish_select'] = 'selected="selected"';
                 }
 
                 $data['header'] = $this->load->controller('common/header');

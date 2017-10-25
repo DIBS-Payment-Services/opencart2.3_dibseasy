@@ -147,6 +147,7 @@
                  <option value="en-GB" <?php echo $english_selected; ?> ><?php echo $text_english; ?></option>
                  <option value="sv-SE" <?php echo $swedish_selected; ?> ><?php echo $text_swedish; ?></option>
                  <option value="nb-NO" <?php echo $norwegian_select; ?> ><?php echo $text_norwegian; ?></option>
+                 <option value="da-DK" <?php echo $danish_select; ?> ><?php echo $text_danish; ?></option>
               </select>
             </div>
           </div>

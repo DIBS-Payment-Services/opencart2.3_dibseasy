@@ -23,12 +23,15 @@ $_['entry_testmode_description'] = 'Set it depending on live or test secret key'
 $_['entry_debug_description'] = 'Debug info will be written in the log file: system/storage/logs/dibs.easy.log';
 $_['entry_language'] = 'Language';
 
+$_['text_english']   = 'English';
+$_['text_swedish']   = 'Swedish';
+$_['text_norwegian'] = 'Norwegian';
+$_['text_danish']    = 'Danish';
 
 // Help
 $_['help_total'] = 'The checkout total the order must reach before this payment method becomes active.';
 
 // Error
-$_['error_permission']	 = 'Warning: You do not have permission to modify payment Cash On Delivery!';
 $_['entry_dibseasy_merchant'] = 'DIBS Merchant ID';
 $_['entry_dibseasy_checkoutkey'] = 'Checkout key';
 $_['entry_dibseasy_checkoutk_live'] = 'Checkout key';
