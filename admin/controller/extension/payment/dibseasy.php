@@ -52,7 +52,7 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                 $data['entry_testmode_description'] =  $this->language->get('entry_testmode_description');
                 $data['entry_debug_description'] = $this->language->get('entry_debug_description');
                 $data['entry_language'] = $this->language->get('entry_language');
-                
+                $data['entry_dibseasy_terms_and_conditions'] =  $this->language->get('entry_dibseasy_terms_and_conditions');
                 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -127,6 +127,12 @@ class ControllerExtensionPaymentDibseasy extends Controller {
 			$data['dibseasy_testmode'] = $this->request->post['dibseasy_testmode'];
 		} else {
 			$data['dibseasy_testmode'] = $this->config->get('dibseasy_testmode');
+		}
+
+                if (isset($this->request->post['dibseasy_terms_and_conditions'])) {
+			$data['dibseasy_terms_and_conditions'] = $this->request->post['dibseasy_terms_and_conditions'];
+		} else {
+			$data['dibseasy_terms_and_conditions'] = $this->config->get('dibseasy_terms_and_conditions');
 		}
 
 		$this->load->model('localisation/order_status');

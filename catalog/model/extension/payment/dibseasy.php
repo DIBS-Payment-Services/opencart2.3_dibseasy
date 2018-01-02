@@ -648,8 +648,8 @@ class ModelExtensionPaymentDibseasy extends Model {
                     'currency' => $order_info['currency_code'],
                     'reference' => 'opc_' . $this->session->data['order_id']),
                     'checkout' => array(
-                    'url' => $this->url->link('extension/payment/dibseasy/confirm', '', true),
-                ),
+                        'url' => $this->url->link('extension/payment/dibseasy/confirm', '', true),
+                        'termsUrl' => $this->config->get('dibseasy_terms_and_conditions')),
                 'merchantNumber' => trim($this->config->get('dibseasy_merchant')),
             );
             if($this->config->get('dibseasy_debug')) {

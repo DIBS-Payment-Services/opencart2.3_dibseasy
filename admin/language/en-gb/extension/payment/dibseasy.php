@@ -22,6 +22,7 @@ $_['entry_shipping_method_description'] = 'It is possible to use only 2 types of
 $_['entry_testmode_description'] = 'Set it depending on live or test secret key';
 $_['entry_debug_description'] = 'Debug info will be written in the log file: system/storage/logs/dibs.easy.log';
 $_['entry_language'] = 'Language';
+$_['entry_dibseasy_terms_and_conditions'] = ' Terms & conditions';
 
 $_['text_english']   = 'English';
 $_['text_swedish']   = 'Swedish';

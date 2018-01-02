@@ -81,6 +81,12 @@
 	      <?php } ?>
           </div>
          </div>
+         <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-dibseasy-terms_and_conditions"><?php echo $entry_dibseasy_terms_and_conditions; ?></label>
+          <div class="col-sm-10">
+              <input type="text" name="dibseasy_terms_and_conditions" value="<?php echo $dibseasy_terms_and_conditions; ?>" placeholder="https://" id="input-dibseasy-terms-and-conditions" class="form-control" />
+          </div>
+          </div>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-order-status"><?php echo $entry_order_status; ?></label>
             <div class="col-sm-10">
