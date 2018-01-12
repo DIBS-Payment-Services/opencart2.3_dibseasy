@@ -4,7 +4,7 @@ $_['heading_title']		 = 'Dibs Easy';
 
 // Text
 $_['text_extension'] = 'Extensions';
-$_['text_success'] = 'Success: You have modified Cash On Delivery payment module!';
+$_['text_success'] = 'Success: You have modified DIBS Easy payment module!';
 $_['text_edit'] = 'Edit Dibs Easy';
 $_['text_dibseasy'] = '<a href= "http://www.dibs.se/" target="_blank"><img alt="Dibs" ешеду="Dibs" src="view/image/payment/dibs.png" style="width: 113px; height: 61px;"></a>';
 
