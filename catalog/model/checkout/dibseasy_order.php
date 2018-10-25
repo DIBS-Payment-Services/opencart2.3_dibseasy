@@ -361,7 +361,7 @@ class ModelCheckoutDibseasyOrder extends Model {
 				// Check for any downloadable products
 				$download_status = false;
 	
-				$order_product_query = $this->db->query("SELECT pr.tax_class_id, op.order_product_id,  op.order_id, op.product_id, op.name, op.model, op.quantity, op.price, op.total, op.tax, op.reward FROM " . DB_PREFIX . "order_product op join oc_product pr on op.product_id = pr.product_id  WHERE order_id = '" . (int)$order_id . "'");
+				$order_product_query = $this->db->query("SELECT pr.tax_class_id, op.order_product_id,  op.order_id, op.product_id, op.name, op.model, op.quantity, op.price, op.total, op.tax, op.reward FROM " . DB_PREFIX . "order_product op join " . DB_PREFIX . "product pr on op.product_id = pr.product_id  WHERE order_id = '" . (int)$order_id . "'");
 	
 				foreach ($order_product_query->rows as $order_product) {
 					// Check if there are any linked downloads
