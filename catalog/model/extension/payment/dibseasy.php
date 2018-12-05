@@ -499,8 +499,9 @@ class ModelExtensionPaymentDibseasy extends Model {
         protected function makeCurlRequest($url, $data, $method = 'POST') {
             $curl = curl_init();
             $header = array();
-            $headers[] = "Content-Type: text/json"; 
-            $headers[] = "Accept: test/json"; 
+            $headers[] = "Content-Type: text/json";
+            $headers[] = "Accept: test/json";
+	    $headers[] = 'commercePlatformTag: OC23';
             if($this->config->get('dibseasy_testmode') == 1) {
                $headers[] = 'Authorization: ' . str_replace('-', '', trim($this->config->get('dibseasy_testkey')));
             } else {
