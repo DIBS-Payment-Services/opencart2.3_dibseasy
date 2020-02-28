@@ -653,11 +653,42 @@ class ModelExtensionPaymentDibseasy extends Model {
                         'termsUrl' => $this->config->get('dibseasy_terms_and_conditions')),
                 'merchantNumber' => trim($this->config->get('dibseasy_merchant')),
             );
+
+
+            $customerType = $this->config->get('dibseasy_allowed_customer_type');
+            $supportedTypes = array();
+            if(trim($customerType)) {
+                $default = null;
+                switch ($customerType) {
+                    case 'b2c' :
+                        $supportedTypes = array('B2C');
+                        $default = 'B2C';
+                        break;
+                    case 'b2b':
+                        $supportedTypes = array('B2B');
+                        $default = 'B2B';
+                        break;
+                    case 'b2c_b2b_b2c':
+                        $supportedTypes = array('B2C', 'B2B');
+                        $default = 'B2C';
+                        break;
+                    case 'b2b_b2c_b2b':
+                        $supportedTypes = array('B2C', 'B2B');
+                        $default = 'B2B';
+                        break;
+                }
+            }
+            $consumerType = array('supportedTypes'=>$supportedTypes,'default'=>$default);
+            if($consumerType) {
+                $checkout = $data['checkout'];
+                $checkout['consumerType'] = $consumerType;
+                $data['checkout'] = $checkout;
+            }
+
             if($this->config->get('dibseasy_debug')) {
                    $this->logger->write("Collected data:");
                    $this->logger->write($data);
             }
-            
             return json_encode($data);
         }
         

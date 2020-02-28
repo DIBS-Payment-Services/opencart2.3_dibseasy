@@ -158,6 +158,17 @@
             </div>
           </div>
           <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-customer-type"> entry_allowed_customer_type' </label>
+                <div class="col-sm-10">
+                    <select name="dibseasy_allowed_customer_type" id="input-allowed_customer_type" class="form-control">
+                        <option value="b2c" <?= $b2c_selected; ?>>  <?= $text_b2c; ?> </option>
+                        <option value="b2b" <?= $b2b_selected; ?>>  <?= $text_b2b; ?> </option>
+                        <option value="b2c_b2b_b2c" <?= $b2c_b2b_b2c_selected; ?>>  <?= $text_b2c_b2b_b2c; ?> </option>
+                        <option value="b2b_b2c_b2b" <?= $b2b_b2c_b2b_selected; ?>>  <?= $text_b2b_b2c_b2b; ?> </option>
+                    </select>
+                </div>
+          </div>
+          <div class="form-group">
               <label class="col-sm-2 control-label" for="input-status"><span data-toggle="tooltip" title="<?php echo $entry_debug_description; ?>"><?php echo $entry_debug; ?></span></label>
             <div class="col-sm-10">
               <select name="dibseasy_debug" id="input-status" class="form-control">

@@ -6,7 +6,7 @@ $_['heading_title']		 = 'Dibs Easy';
 $_['text_extension'] = 'Extensions';
 $_['text_success'] = 'Success: You have modified DIBS Easy payment module!';
 $_['text_edit'] = 'Edit Dibs Easy';
-$_['text_dibseasy'] = '<a href= "http://www.dibs.se/" target="_blank"><img alt="Dibs" ешеду="Dibs" src="view/image/payment/dibs.png" style="width: 113px; height: 61px;"></a>';
+$_['text_dibseasy'] = '<a href= "http://www.dibs.se/" target="_blank"><img alt="Dibs" src="view/image/payment/dibs.png" style="width: 86px; height: 30px;"></a>';
 
 // Entry
 $_['entry_total']		 = 'Total';
@@ -28,6 +28,11 @@ $_['text_english']   = 'English';
 $_['text_swedish']   = 'Swedish';
 $_['text_norwegian'] = 'Norwegian';
 $_['text_danish']    = 'Danish';
+
+$_['text_b2b']   = 'B2B';
+$_['text_b2c']   = 'B2C';
+$_['text_b2c_b2b_b2c'] = 'B2C and B2B default to B2C';
+$_['text_b2b_b2c_b2b']    = 'B2B and B2C default to B2B';
 
 // Help
 $_['help_total'] = 'The checkout total the order must reach before this payment method becomes active.';

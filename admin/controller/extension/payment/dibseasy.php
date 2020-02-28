@@ -205,10 +205,20 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                 $data['text_norwegian'] = $this->language->get('text_norwegian');
                 $data['text_danish'] = $this->language->get('text_danish');
 
+                $data['text_b2c'] = $this->language->get('text_b2c');
+                $data['text_b2b'] = $this->language->get('text_b2b');
+                $data['text_b2c_b2b_b2c'] = $this->language->get('text_b2c_b2b_b2c');
+                $data['text_b2b_b2c_b2b'] = $this->language->get('text_b2b_b2c_b2b');
+
                 $data['english_selected'] = '';
                 $data['swedish_selected'] = '';
                 $data['norwegian_select'] = '';
                 $data['danish_select'] = '';
+
+                $data['b2b_selected'] ='';
+                $data['b2c_selected'] = '';
+                $data['b2c_b2b_b2c_selected'] = '';
+                $data['b2b_b2c_b2b_selected'] = '';
 
                 if($this->config->get('dibseasy_language') == 'sv-SE') {
                    $data['swedish_selected'] = 'selected="selected"';
@@ -226,7 +236,22 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                    $data['danish_select'] = 'selected="selected"';
                 }
 
-                $data['header'] = $this->load->controller('common/header');
+                //
+
+                if($this->config->get('dibseasy_allowed_customer_type') == 'b2c') {
+                    $data['b2c_selected'] = 'selected="selected"';
+                }
+                if($this->config->get('dibseasy_allowed_customer_type') == 'b2b') {
+                    $data['b2b_selected'] = 'selected="selected"';
+                }
+                if($this->config->get('dibseasy_allowed_customer_type') == 'b2c_b2b_b2c') {
+                    $data['b2c_b2b_b2c_selected'] = 'selected="selected"';
+                }
+                if($this->config->get('dibseasy_allowed_customer_type') == 'b2b_b2c_b2b') {
+                    $data['b2b_b2c_b2b_selected'] = 'selected="selected"';
+                }
+
+        $data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 

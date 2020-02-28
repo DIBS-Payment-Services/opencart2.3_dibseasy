@@ -17,6 +17,19 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                if (isset($this->session->data['payment_method']['code']) && $this->session->data['payment_method']['code'] == 'dibseasy') {
                         $this->load->model('extension/payment/dibseasy');
                         $response = $this->model_extension_payment_dibseasy->getTransactionInfo($_GET['paymentId']);
+                        if(isset($response->payment->consumer->company->name)) {
+                            $firstName = $response->payment->consumer->company->contactDetails->firstName;
+                            $lastName = $response->payment->consumer->company->contactDetails->lastName;
+                            $email =  $response->payment->consumer->company->contactDetails->email;
+                            $phoneNumber = $response->payment->consumer->company->contactDetails->phoneNumber->prefix .
+                                           $response->payment->consumer->company->contactDetails->phoneNumber->number;
+                        }else {
+                            $firstName = $response->payment->consumer->privatePerson->firstName;
+                            $lastName = $response->payment->consumer->privatePerson->lastName;
+                            $email = $response->payment->consumer->privatePerson->email;
+                            $phoneNumber = $response->payment->consumer->privatePerson->phoneNumber->prefix .
+                                           $response->payment->consumer->privatePerson->phoneNumber->number;
+                       }
                         $maskedCardNumber = $response->payment->paymentDetails->cardDetails->maskedPan;
                         $cardPostfix = substr($maskedCardNumber, -4);
                         if($response->payment->paymentDetails->paymentType) {
@@ -24,19 +37,19 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                             $res = $this->model_extension_payment_dibseasy->getCountryByIsoCode3($response->payment->consumer->shippingAddress->country);
                             $country = $res['name'];
                             $country_id = $res['country_id'];
-                            $orderUpdate = array('firstname' => $response->payment->consumer->privatePerson->firstName,
-                                    'lastname' => $response->payment->consumer->privatePerson->lastName,
-                                    'email' => $response->payment->consumer->privatePerson->email,
-                                    'telephone' => $response->payment->consumer->privatePerson->phoneNumber->prefix .$response->payment->consumer->privatePerson->phoneNumber->number ,
-                                    'shipping_lastname' => $response->payment->consumer->privatePerson->lastName,
-                                    'shipping_firstname' => $response->payment->consumer->privatePerson->firstName,
+                            $orderUpdate = array('firstname' => $firstName,
+                                    'lastname' => $lastName,
+                                    'email' => $email,
+                                    'telephone' => $phoneNumber,
+                                    'shipping_lastname' => $lastName,
+                                    'shipping_firstname' => $firstName,
                                     'shipping_address_1' => $response->payment->consumer->shippingAddress->addressLine1,
                                     'shipping_city' => $response->payment->consumer->shippingAddress->city,
                                     'shipping_country' => $country,
                                     'shipping_postcode' => $response->payment->consumer->shippingAddress->postalCode,
                                     'shipping_country_id' => $country_id,
-                                    'payment_lastname' => $response->payment->consumer->privatePerson->lastName,
-                                    'payment_firstname' => $response->payment->consumer->privatePerson->firstName,
+                                    'payment_lastname' => $lastName,
+                                    'payment_firstname' => $firstName,
                                     'payment_address_1' => $response->payment->consumer->shippingAddress->addressLine1,
                                     'payment_city' => $response->payment->consumer->shippingAddress->city,
                                     'payment_country' => $country,
@@ -76,7 +89,6 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                             $this->logger->write('================================================================');
                             $this->response->redirect($this->url->link('checkout/dibseasy', '', true));
                         }
-                        
 		} else {
                     $this->response->redirect($this->url->link('checkout/dibseasy', '', true));
                 }
