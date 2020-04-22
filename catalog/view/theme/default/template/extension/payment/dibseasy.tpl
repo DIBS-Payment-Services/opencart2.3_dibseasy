@@ -7,7 +7,7 @@
 $('#button-confirm').on('click', function() {
 	$.ajax({
 		type: 'get',
-		url: 'index.php?route=extension/payment/dibseasy/confirm',
+		url: 'index.php?route=extension/payment/dibseasy/redirect',
 		cache: false,
 		beforeSend: function() {
 			$('#button-confirm').button('loading');
@@ -15,9 +15,14 @@ $('#button-confirm').on('click', function() {
 		complete: function() {
 			$('#button-confirm').button('reset');
 		},
-		success: function() {
-			location = '<?php echo $continue; ?>';
-		}
+		success: function(json) {
+
+          if (json['redirect']) {
+            location = json['redirect'];
+          } else {
+            window.location.reload(false);
+          }
+	}
 	});
 });
 //--></script>

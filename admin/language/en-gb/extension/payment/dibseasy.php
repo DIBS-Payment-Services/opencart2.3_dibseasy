@@ -24,6 +24,10 @@ $_['entry_debug_description'] = 'Debug info will be written in the log file: sys
 $_['entry_language'] = 'Language';
 $_['entry_dibseasy_terms_and_conditions'] = ' Terms & conditions';
 
+$_['entry_checkout_type'] = 'Checkout type';
+$_['text_checkout_type_embedded'] = 'Embedded';
+$_['text_checkout_type_hosted'] = 'Hosted';
+
 $_['text_english']   = 'English';
 $_['text_swedish']   = 'Swedish';
 $_['text_norwegian'] = 'Norwegian';

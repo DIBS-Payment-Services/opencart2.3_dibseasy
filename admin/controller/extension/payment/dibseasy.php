@@ -27,6 +27,12 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                 
                	$data['entry_dibseasy_checkoutkey_test'] = $this->language->get('entry_dibseasy_checkoutkey');
                 $data['entry_dibseasy_checkoutkey_live'] = $this->language->get('entry_dibseasy_checkoutk_live');
+
+                $data['entry_checkout_type'] = $this->language->get('entry_checkout_type');
+
+                $data['text_checkout_type_hosted'] = $this->language->get('text_checkout_type_hosted');
+
+                $data['text_checkout_type_embedded'] = $this->language->get('text_checkout_type_embedded');
                 
                 $data['entry_order_status'] = $this->language->get('entry_order_status');
                 
@@ -158,19 +164,25 @@ class ControllerExtensionPaymentDibseasy extends Controller {
 			$data['dibseasy_livekey'] = $this->config->get('dibseasy_livekey');
 		}
 
-                if (isset($this->request->post['dibseasy_testkey'])) {
+        if (isset($this->request->post['dibseasy_testkey'])) {
 			$data['dibseasy_testkey'] = $this->request->post['dibseasy_testkey'];
 		} else {
 			$data['dibseasy_testkey'] = $this->config->get('dibseasy_testkey');
 		}
 
-                if (isset($this->request->post['dibseasy_language'])) {
+        if (isset($this->request->post['dibseasy_language'])) {
 			$data['dibseasy_language'] = $this->request->post['dibseasy_language'];
 		} else {
 			$data['dibseasy_language'] = $this->config->get('dibseasy_language');
 		}
 
-		$data['error_merchant'] = '';
+        if (isset($this->request->post['dibseasy_checkout_type'])) {
+            $data['dibseasy_checkout_type'] = $this->request->post['dibseasy_checkout_type'];
+        } else {
+            $data['dibseasy_checkout_type'] = $this->config->get('dibseasy_checkout_type');
+        }
+
+               $data['error_merchant'] = '';
                 if(isset($this->error['error_merchant'])) {
                     $data['error_merchant'] = $this->error['error_merchant']; 
                 }

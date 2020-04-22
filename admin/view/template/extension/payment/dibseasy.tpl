@@ -118,6 +118,8 @@
                 <?php } ?>
             </div>
           </div>
+
+
           <div class="form-group">
             <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_status; ?></label>
             <div class="col-sm-10">
@@ -133,6 +135,20 @@
             </div>
           </div>
           <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_checkout_type; ?></label>
+                <div class="col-sm-10">
+                    <select name="dibseasy_checkout_type" id="input-status" class="form-control">
+                        <?php if ('hosted' == $dibseasy_checkout_type) { ?>
+                            <option value="hosted" selected="selected"><?php echo $text_checkout_type_hosted; ?></option>
+                            <option value="embedded"><?php echo $text_checkout_type_embedded; ?></option>
+                        <?php } else if('embedded' == $dibseasy_checkout_type )  { ?>
+                            <option value="hosted"><?php echo $text_checkout_type_hosted; ?></option>
+                            <option value="embedded" selected="selected"><?php echo $text_checkout_type_embedded; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
               <label class="col-sm-2 control-label" for="input-status"><span data-toggle="tooltip" title="<?php echo $entry_testmode_description; ?>"><?php echo $entry_testmode; ?></span></label>
             <div class="col-sm-10">
               <select name="dibseasy_testmode" id="input-status" class="form-control">

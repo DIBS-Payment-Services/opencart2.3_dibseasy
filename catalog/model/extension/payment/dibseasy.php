@@ -501,7 +501,7 @@ class ModelExtensionPaymentDibseasy extends Model {
             $header = array();
             $headers[] = "Content-Type: text/json";
             $headers[] = "Accept: test/json";
-	    $headers[] = 'commercePlatformTag: OC23';
+            $headers[] = 'commercePlatformTag: OC23';
             if($this->config->get('dibseasy_testmode') == 1) {
                $headers[] = 'Authorization: ' . str_replace('-', '', trim($this->config->get('dibseasy_testkey')));
             } else {
@@ -628,10 +628,16 @@ class ModelExtensionPaymentDibseasy extends Model {
                     'currency' => $order_info['currency_code'],
                     'reference' => 'opc_' . $this->session->data['order_id']),
                     'checkout' => array(
-                        'url' => $this->url->link('extension/payment/dibseasy/confirm', '', true),
                         'termsUrl' => $this->config->get('dibseasy_terms_and_conditions')),
                 'merchantNumber' => trim($this->config->get('dibseasy_merchant')),
             );
+
+            $data['checkout']['returnUrl'] = $this->url->link('extension/payment/dibseasy/confirm', '', true);
+            $data['checkout']['integrationType'] = 'HostedPaymentPage';
+
+            //$data['checkout']['url'] = $this->url->link('extension/payment/dibseasy/confirm', '', true);
+
+
 
             $customerType = $this->config->get('dibseasy_allowed_customer_type');
             $supportedTypes = array();

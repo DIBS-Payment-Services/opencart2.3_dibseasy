@@ -93,4 +93,19 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                     $this->response->redirect($this->url->link('checkout/dibseasy', '', true));
                 }
 	}
+
+    public function redirect() {
+        $this->load->model('extension/payment/dibseasy');
+        $this->load->language('checkout/dibseasy');
+        $paymentid = $this->model_extension_payment_dibseasy->initCheckout();
+        if(!is_null($paymentid)) {
+            $transaction = $this->model_extension_payment_dibseasy->getTransactionInfo($paymentid);
+            $json['redirect'] = $transaction->payment->checkout->url . '&language=' . $this->config->get('payment_dibseasy_language');
+        } else {
+            $this->session->data['error'] = $this->language->get('dibseasy_checkout_redirect_error');
+            $json['error'] = 1;
+        }
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
 }
