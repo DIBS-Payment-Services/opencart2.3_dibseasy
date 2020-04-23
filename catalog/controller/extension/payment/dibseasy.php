@@ -16,7 +16,11 @@ class ControllerExtensionPaymentDibseasy extends Controller {
 	public function confirm() {
                if (isset($this->session->data['payment_method']['code']) && $this->session->data['payment_method']['code'] == 'dibseasy') {
                         $this->load->model('extension/payment/dibseasy');
-                        $response = $this->model_extension_payment_dibseasy->getTransactionInfo($_GET['paymentId']);
+                        $paymentId  = $this->extractPaymentId();
+                        $response = $this->model_extension_payment_dibseasy->getTransactionInfo( $paymentId );
+
+
+
                         if(isset($response->payment->consumer->company->name)) {
                             $firstName = $response->payment->consumer->company->contactDetails->firstName;
                             $lastName = $response->payment->consumer->company->contactDetails->lastName;
@@ -107,5 +111,18 @@ class ControllerExtensionPaymentDibseasy extends Controller {
         }
         $this->response->addHeader('Content-Type: application/json');
         $this->response->setOutput(json_encode($json));
+    }
+
+
+    private function extractPaymentId()
+    {
+        $result = null;
+        if(isset($this->request->get['paymentid'])) {
+            $result = $this->request->get['paymentid'];
+        }
+        if(isset($this->request->get['paymentId'])) {
+            $result = $this->request->get['paymentId'];
+        }
+        return $result;
     }
 }
