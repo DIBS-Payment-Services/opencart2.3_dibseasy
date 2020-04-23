@@ -84,8 +84,8 @@ class ControllerCheckoutDibseasySuccess extends Controller {
 		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
-                $data['transactionid'] = isset($_SESSION['dibseasy_transaction']) ? $_SESSION['dibseasy_transaction'] : '';
-                unset($_SESSION['dibseasy_transaction']);
+        $data['transactionid'] = isset($_SESSION['dibseasy_transaction']) ? $_SESSION['dibseasy_transaction'] : '';
+        unset($_SESSION['dibseasy_transaction']);
 		$this->response->setOutput($this->load->view('common/dibseasy_success', $data));
 	}
 }

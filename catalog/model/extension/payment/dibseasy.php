@@ -2,15 +2,25 @@
 class ModelExtensionPaymentDibseasy extends Model {
         
     const METHOD_CODE = 'dibseasy';
+
     const SHIPPING_CODE = 'free';
+
     const PAYMENT_API_TEST_URL = 'https://test.api.dibspayment.eu/v1/payments';
+
     const PAYMENT_API_LIVE_URL = 'https://api.dibspayment.eu/v1/payments';
+
     const PAYMENT_TRANSACTION_URL_PATTERN_TEST = 'https://test.api.dibspayment.eu/v1/payments/{transactionId}';
+
     const PAYMENT_TRANSACTION_URL_PATTERN_LIVE = 'https://api.dibspayment.eu/v1/payments/{transactionId}';
+
     const CHECKOUT_SCRIPT_TEST = 'https://test.checkout.dibspayment.eu/v1/checkout.js?v=1';
+
     const CHECKOUT_SCRIPT_LIVE = 'https://checkout.dibspayment.eu/v1/checkout.js?v=1';
+
     protected $products = array();
+
     protected $logger;
+
     public $paymentId;
 
         public function __construct($registry) {
@@ -18,21 +28,20 @@ class ModelExtensionPaymentDibseasy extends Model {
                 parent::__construct($registry);
         }
         
-	public function getMethod($address, $total) {
-            $this->load->language('extension/payment/dibseasy');
-            $status = true;
-            $method_data = array();
-            if ($status) {
-                $method_data = array(
-                    'code'       => self::METHOD_CODE,
-                    'title'      =>  $this->language->get('text_title'),
-                    'terms'      => '',
-                    'sort_order' => $this->config->get('dibseasy_sort_order')
-                );
-            }
-           return $method_data;
-	}
-        
+        public function getMethod($address, $total) {
+                $this->load->language('extension/payment/dibseasy');
+                $status = true;
+                $method_data = array();
+                if ($status) {
+                    $method_data = array(
+                        'code'       => self::METHOD_CODE,
+                        'title'      =>  $this->language->get('text_title'),
+                        'terms'      => '',
+                        'sort_order' => $this->config->get('dibseasy_sort_order')
+                    );
+                }
+               return $method_data;
+        }
         
         public function getCheckoutConfirm() {
                 $this->load->language('extension/payment/dibseasy');
@@ -246,7 +255,6 @@ class ModelExtensionPaymentDibseasy extends Model {
 				}
 			}
 
-			
 			$order_data['total'] = $total_data['total'];
 
 			if (isset($this->request->cookie['tracking'])) {
@@ -312,8 +320,9 @@ class ModelExtensionPaymentDibseasy extends Model {
 
 			$this->load->model('checkout/order');
 
-                        $order_data['comment'] = '';
-			$this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);
+            $order_data['comment'] = '';
+
+            $this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);
 
 			$data['text_recurring_item'] = $this->language->get('text_recurring_item');
 			$data['text_payment_recurring'] = $this->language->get('text_payment_recurring');
@@ -328,7 +337,7 @@ class ModelExtensionPaymentDibseasy extends Model {
 
 			$data['products'] = array();
                       
-                        foreach ($this->cart->getProducts() as $product) {
+            foreach ($this->cart->getProducts() as $product) {
 				$option_data = array();
                    
 				foreach ($product['option'] as $option) {
@@ -408,21 +417,23 @@ class ModelExtensionPaymentDibseasy extends Model {
 				);
                                 
 			}
-                        $data['checkoutkey'] = trim($this->config->get('dibseasy_checkoutkey'));
-                        if($this->config->get('dibseasy_testmode') == 0) {
-                            $data['checkoutkey'] = trim($this->config->get('dibseasy_checkoutkey_live'));
-                        } else {
-                            $data['checkoutkey'] =  trim($this->config->get('dibseasy_checkoutkey_test'));
-                        }
-                        $data['language'] = $this->config->get('dibseasy_language');
-                        
-                        if($this->config->get('dibseasy_testmode') == 0) {
-                             $data['checkout_script'] = self::CHECKOUT_SCRIPT_LIVE;
-                        } else {
-                             $data['checkout_script'] = self::CHECKOUT_SCRIPT_TEST;
-                        }
-                        
-                        $data['checkoutconfirmurl'] = $this->url->link('extension/payment/dibseasy/confirm', '', true);
+
+            $data['checkoutkey'] = trim($this->config->get('dibseasy_checkoutkey'));
+
+			if($this->config->get('dibseasy_testmode') == 0) {
+                $data['checkoutkey'] = trim($this->config->get('dibseasy_checkoutkey_live'));
+            } else {
+                $data['checkoutkey'] =  trim($this->config->get('dibseasy_checkoutkey_test'));
+            }
+            $data['language'] = $this->config->get('dibseasy_language');
+
+            if($this->config->get('dibseasy_testmode') == 0) {
+                 $data['checkout_script'] = self::CHECKOUT_SCRIPT_LIVE;
+            } else {
+                 $data['checkout_script'] = self::CHECKOUT_SCRIPT_TEST;
+            }
+
+            $data['checkoutconfirmurl'] = $this->url->link('extension/payment/dibseasy/confirm', '', true);
         	} else {
 			$data['redirect'] = $redirect;
 		}
@@ -479,14 +490,11 @@ class ModelExtensionPaymentDibseasy extends Model {
         }
         
         public function initCheckout() {
-            $paymentId = '';
-         
             if($this->config->get('dibseasy_testmode') == 0) {
                 $url = self::PAYMENT_API_LIVE_URL;
             } else {
                 $url = self::PAYMENT_API_TEST_URL;
             }
-            
             $response = $this->makeCurlRequest($url, $this->collectData());
             if($response && isset($response->paymentId)) {
                 return $response->paymentId;
@@ -718,9 +726,9 @@ class ModelExtensionPaymentDibseasy extends Model {
         }
         
         public function getCountryByIsoCode3($iso_code_3) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "country WHERE `iso_code_3` = '" . $this->db->escape($iso_code_3) . "' AND `status` = '1'");
-		return $query->row;
-	}
+		    $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "country WHERE `iso_code_3` = '" . $this->db->escape($iso_code_3) . "' AND `status` = '1'");
+		    return $query->row;
+	    }
         
         public function setAddresses($order_id, $data) {
             $setFields = '';
@@ -731,7 +739,7 @@ class ModelExtensionPaymentDibseasy extends Model {
         }
         
         protected function getTotals() {
-               $order_data = array();
+            $order_data = array();
             $order_data['totals'] = array();
             $this->load->model('extension/extension');
             $sort_order = array();
@@ -784,10 +792,10 @@ class ModelExtensionPaymentDibseasy extends Model {
             $tax_rates = $this->tax->getRates($value,  $tax_class_id);
             foreach ($tax_rates as $tax_rate) {
                   if($tax_rate['type'] == 'F') {
-                        $amount +=  $this->currency->format($tax_rate['amount'], $order_info['currency_code'], '', false);
-                    } else {
-                       $amount += $tax_rate['amount'];
-                    }
+                      $amount +=  $this->currency->format($tax_rate['amount'], $order_info['currency_code'], '', false);
+                   } else {
+                      $amount += $tax_rate['amount'];
+                   }
             }
             return $amount;
 	}
@@ -817,7 +825,7 @@ class ModelExtensionPaymentDibseasy extends Model {
 
     /**
      *
-     * @return string
+     * @return float
      */
     public function getGrandTotal() {
         $totals = $this->getTotals();

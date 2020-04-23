@@ -1,5 +1,5 @@
-
 <?php echo $header; ?><?php echo $column_left; ?>
+
 <div id="content">
   <div class="page-header">
     <div class="container-fluid">
@@ -14,6 +14,7 @@
       </ul>
     </div>
   </div>
+
   <div class="container-fluid">
     <?php if ($error_warning) { ?>
     <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>

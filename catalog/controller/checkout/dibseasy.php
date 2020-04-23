@@ -2,9 +2,9 @@
 
 class ControllerCheckoutDibseasy extends Controller { 
     
-    
     public function index() {
-        	$this->load->language('checkout/checkout');
+
+       	$this->load->language('checkout/checkout');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -45,23 +45,23 @@ class ControllerCheckoutDibseasy extends Controller {
 			$data['text_checkout_confirm'] = sprintf($this->language->get('text_checkout_confirm'), 4);	
 		}
 
-                $this->load->model('extension/payment/dibseasy');
-                $dibs_model = $this->model_extension_payment_dibseasy;
-                
-                $checkoutData = $dibs_model->getCheckoutConfirm();
-                
-                $data['paymentId'] = '';
-            
-                if($paymentId = $this->model_extension_payment_dibseasy->initCheckout()) {
-                    $data['paymentId'] = $paymentId;
-                }else {
-                    $data['initerror'] = 'An error occurred during payment initialization';
-                }
-                
-                if (isset($this->session->data['error'])) {
-			$data['error_warning'] = $this->session->data['error'];
-			unset($this->session->data['error']);
-		} else {
+        $this->load->model('extension/payment/dibseasy');
+        $dibs_model = $this->model_extension_payment_dibseasy;
+
+        $checkoutData = $dibs_model->getCheckoutConfirm();
+
+        $data['paymentId'] = '';
+
+        if($paymentId = $this->model_extension_payment_dibseasy->initCheckout()) {
+            $data['paymentId'] = $paymentId;
+        }else {
+            $data['initerror'] = 'An error occurred during payment initialization';
+        }
+
+        if (isset($this->session->data['error'])) {
+            $data['error_warning'] = $this->session->data['error'];
+            unset($this->session->data['error']);
+        } else {
 			$data['error_warning'] = '';
 		}
 
@@ -81,8 +81,8 @@ class ControllerCheckoutDibseasy extends Controller {
 		$data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
-                // $this->model_extension_payment_dibseasy->getCheckoutConfirm()
-    		$this->response->setOutput($this->load->view('checkout/dibseasy', array_merge($data, $checkoutData)));
+
+		$this->response->setOutput($this->load->view('checkout/dibseasy', array_merge($data, $checkoutData)));
 	}
     
 }
