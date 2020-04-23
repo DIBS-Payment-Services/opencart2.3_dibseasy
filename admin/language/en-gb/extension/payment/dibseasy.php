@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		 = 'Dibs Easy';
+$_['heading_title']	= 'Nets Easy Checkout';
 
 // Text
 $_['text_extension'] = 'Extensions';
@@ -9,7 +9,7 @@ $_['text_edit'] = 'Edit Dibs Easy';
 $_['text_dibseasy'] = '<a href= "http://www.dibs.se/" target="_blank"><img alt="Dibs" src="view/image/payment/dibs.png" style="width: 86px; height: 30px;"></a>';
 
 // Entry
-$_['entry_total']		 = 'Total';
+$_['entry_total'] = 'Total';
 $_['entry_order_status'] = 'Order Status';
 $_['entry_geo_zone']	 = 'Geo Zone';
 $_['entry_status']	 = 'Status';
