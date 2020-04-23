@@ -506,19 +506,22 @@ class ModelExtensionPaymentDibseasy extends Model {
             } else {
                $headers[] = 'Authorization: ' . str_replace('-', '', trim($this->config->get('dibseasy_livekey')));
             }
+
             $postData = $data;
+
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
+
             if($this->config->get('dibseasy_debug')) {
-                   $this->logger->write("Curl request:");
-                   $this->logger->write($data);
+               $this->logger->write("Curl request:");
+               $this->logger->write($data);
             }
+
             $response = curl_exec($curl);
             $info = curl_getinfo($curl);
-            $this->logger->write($info);
             if ($info['http_code'] == 401 || $info['http_code'] == 404 || $info['http_code'] == 403) {
                 $this->logger->write("Authorization failed, please check your secret key and mode test/live");
             } else {
@@ -531,13 +534,10 @@ class ModelExtensionPaymentDibseasy extends Model {
                    return ($responseDecoded) ? $responseDecoded : null;
                 }
             }
-            
             if(curl_error($curl)) {
-              $this->logger->write("Curl error:");
-              $this->logger->write(curl_error($curl));
+                $this->logger->write("Curl error:");
+                $this->logger->write(curl_error($curl));
             }
-            
-         
         }
         
         protected function getTotalTaxRate($tax_class_id) {
@@ -549,7 +549,6 @@ class ModelExtensionPaymentDibseasy extends Model {
                }
               return $totalRate;
         }
-
 
     /**
      * construct object for creating payment in Nets in json format
@@ -618,7 +617,7 @@ class ModelExtensionPaymentDibseasy extends Model {
                           'taxAmount' => 0,
                           'grossTotalAmount' => $delta,
                           'netTotalAmount' => $delta);
-                  }
+            }
 
            $data = array(
                 'order' => array(
