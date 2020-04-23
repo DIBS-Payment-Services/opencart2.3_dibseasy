@@ -124,9 +124,9 @@ class ModelExtensionPaymentDibseasy extends Model {
 				$order_data['telephone'] = $customer_info['telephone'];
 				$order_data['fax'] = $customer_info['fax'];
 				$order_data['custom_field'] = json_decode($customer_info['custom_field'], true);
-                                $order_data['payment_custom_field'] = (isset($this->session->data['payment_address']['custom_field']) ? $this->session->data['payment_address']['custom_field'] : array());
+                $order_data['payment_custom_field'] = (isset($this->session->data['payment_address']['custom_field']) ? $this->session->data['payment_address']['custom_field'] : array());
 			} else {
-                                $order_data['customer_id'] = 0;
+                $order_data['customer_id'] = 0;
 				$order_data['customer_group_id'] = 1;
 				$order_data['firstname'] = '';
 				$order_data['lastname'] = '';
@@ -135,35 +135,35 @@ class ModelExtensionPaymentDibseasy extends Model {
 				$order_data['fax'] = '';
                                 
                         }
-                            $order_data['payment_firstname'] = '';
-                            $order_data['payment_lastname'] = '';
-                            $order_data['payment_company'] = '';
-                            $order_data['payment_address_1'] = '';
-                            $order_data['payment_address_2'] = '';
-                            $order_data['payment_city'] = '';
-                            $order_data['payment_postcode'] = '';
-                            $order_data['payment_zone'] = '';
-                            $order_data['payment_zone_id'] = '';
-                            $order_data['payment_country'] ='';
-                            $order_data['payment_country_id'] = '';
-                            $order_data['payment_address_format'] = '';       
-                            
-                            // We don't know the shipping still...
-                            $order_data['shipping_firstname'] = '';
-                            $order_data['shipping_lastname'] = '';
-                            $order_data['shipping_company'] = '';
-                            $order_data['shipping_address_1'] = '';
-                            $order_data['shipping_address_2'] = '';
-                            $order_data['shipping_city'] = '';
-                            $order_data['shipping_postcode'] = '';
-                            $order_data['shipping_zone'] = '';
-                            $order_data['shipping_zone_id'] = '';
-                            $order_data['shipping_country'] = '';
-                            $order_data['shipping_country_id'] = '';
-                            $order_data['shipping_address_format'] = '';
-                            $order_data['shipping_custom_field'] = array();
-                            $order_data['shipping_method'] = '';
-                            $order_data['shipping_code'] = '';
+                $order_data['payment_firstname'] = '';
+                $order_data['payment_lastname'] = '';
+                $order_data['payment_company'] = '';
+                $order_data['payment_address_1'] = '';
+                $order_data['payment_address_2'] = '';
+                $order_data['payment_city'] = '';
+                $order_data['payment_postcode'] = '';
+                $order_data['payment_zone'] = '';
+                $order_data['payment_zone_id'] = '';
+                $order_data['payment_country'] ='';
+                $order_data['payment_country_id'] = '';
+                $order_data['payment_address_format'] = '';
+
+                // We don't know the shipping still...
+                $order_data['shipping_firstname'] = '';
+                $order_data['shipping_lastname'] = '';
+                $order_data['shipping_company'] = '';
+                $order_data['shipping_address_1'] = '';
+                $order_data['shipping_address_2'] = '';
+                $order_data['shipping_city'] = '';
+                $order_data['shipping_postcode'] = '';
+                $order_data['shipping_zone'] = '';
+                $order_data['shipping_zone_id'] = '';
+                $order_data['shipping_country'] = '';
+                $order_data['shipping_country_id'] = '';
+                $order_data['shipping_address_format'] = '';
+                $order_data['shipping_custom_field'] = array();
+                $order_data['shipping_method'] = '';
+                $order_data['shipping_code'] = '';
 
 			if (isset($this->session->data['payment_method']['title'])) {
 				$order_data['payment_method'] = $this->session->data['payment_method']['title'];
@@ -498,7 +498,6 @@ class ModelExtensionPaymentDibseasy extends Model {
         
         protected function makeCurlRequest($url, $data, $method = 'POST') {
             $curl = curl_init();
-            $header = array();
             $headers[] = "Content-Type: text/json";
             $headers[] = "Accept: test/json";
             $headers[] = 'commercePlatformTag: OC23';
@@ -633,14 +632,47 @@ class ModelExtensionPaymentDibseasy extends Model {
             );
 
             $data['checkout']['returnUrl'] = $this->url->link('extension/payment/dibseasy/confirm', '', true);
-            $data['checkout']['integrationType'] = 'HostedPaymentPage';
 
-            //$data['checkout']['url'] = $this->url->link('extension/payment/dibseasy/confirm', '', true);
+            if($this->config->get('dibseasy_checkout_type') == 'hosted') {
 
+                if ($this->customer->isLogged()) {
+                    $this->load->model('account/customer');
+                    $customer_info = $this->model_account_customer->getCustomer($this->customer->getId());
+                    $email = $customer_info['email'];
+                } elseif (isset($this->session->data['guest'])) {
+                    $email = $this->session->data['guest']['email'];
+                }
 
+                $consumerData = array(
+                    'email' => $email,
+                    "shippingAddress" => array(
+                        "addressLine1"=> !empty($this->session->data['shipping_address']['address_1']) ? $this->session->data['shipping_address']['address_1']: null,
+                        "addressLine2"=> !empty($this->session->data['shipping_address']['address_2']) ? $this->session->data['shipping_address']['address_2']: null,
+                        "postalCode"=> !empty($this->session->data['shipping_address']['postcode']) ? $this->session->data['shipping_address']['postcode']: null,
+                        "city"=> !empty($this->session->data['shipping_address']['city']) ? $this->session->data['shipping_address']['city']: null,
+                        "country"=> !empty($this->session->data['shipping_address']['iso_code_3']) ? $this->session->data['shipping_address']['iso_code_3']: null
+                    ),
+                    'privatePerson' => array(
+                        'firstName' => !empty($this->session->data['shipping_address']['firstname']) ?$this->session->data['shipping_address']['firstname']: 'FirstName',
+                        'lastName' => !empty($this->session->data['shipping_address']['lastname']) ? $this->session->data['shipping_address']['lastname']: 'LastName',
+                    )
+                );
+
+                $data['checkout']['consumer'] = $consumerData;
+
+                $data['checkout']['merchantHandlesConsumerData'] = true;
+
+                $data['checkout']['integrationType'] = 'HostedPaymentPage';
+            }
+
+            if($this->config->get('dibseasy_checkout_type') == 'embedded') {
+                $data['checkout']['url'] = $this->url->link('extension/payment/dibseasy/confirm', '', true);
+            }
 
             $customerType = $this->config->get('dibseasy_allowed_customer_type');
+
             $supportedTypes = array();
+
             if(trim($customerType)) {
                 $default = null;
                 switch ($customerType) {

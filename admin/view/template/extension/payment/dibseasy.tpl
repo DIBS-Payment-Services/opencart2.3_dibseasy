@@ -174,7 +174,7 @@
             </div>
           </div>
           <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-customer-type"> entry_allowed_customer_type' </label>
+                <label class="col-sm-2 control-label" for="input-customer-type"> <?php echo$entry_allowed_customer_type;?> </label>
                 <div class="col-sm-10">
                     <select name="dibseasy_allowed_customer_type" id="input-allowed_customer_type" class="form-control">
                         <option value="b2c" <?= $b2c_selected; ?>>  <?= $text_b2c; ?> </option>

@@ -23,6 +23,7 @@ $_['entry_testmode_description'] = 'Set it depending on live or test secret key'
 $_['entry_debug_description'] = 'Debug info will be written in the log file: system/storage/logs/dibs.easy.log';
 $_['entry_language'] = 'Language';
 $_['entry_dibseasy_terms_and_conditions'] = ' Terms & conditions';
+$_['entry_allowed_customer_type'] = 'Allowed customer type';
 
 $_['entry_checkout_type'] = 'Checkout type';
 $_['text_checkout_type_embedded'] = 'Embedded';
