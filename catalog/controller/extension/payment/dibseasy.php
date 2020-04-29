@@ -15,27 +15,54 @@ class ControllerExtensionPaymentDibseasy extends Controller {
          }
 
 	public function confirm() {
-               if (isset($this->session->data['payment_method']['code']) && $this->session->data['payment_method']['code'] == 'dibseasy') {
+               if (isset($this->session->data['payment_method']['code'])
+                   && $this->session->data['payment_method']['code'] == 'dibseasy') {
                         $this->load->model('extension/payment/dibseasy');
                         $paymentId  = $this->extractPaymentId();
                         $response = $this->model_extension_payment_dibseasy->getTransactionInfo( $paymentId );
-                        if(isset($response->payment->consumer->company->name)) {
-                            $firstName = $response->payment->consumer->company->contactDetails->firstName;
-                            $lastName = $response->payment->consumer->company->contactDetails->lastName;
-                            $email =  $response->payment->consumer->company->contactDetails->email;
-                            $phoneNumber = $response->payment->consumer->company->contactDetails->phoneNumber->prefix .
-                                           $response->payment->consumer->company->contactDetails->phoneNumber->number;
-                        }else {
-                            $firstName = $response->payment->consumer->privatePerson->firstName;
-                            $lastName = $response->payment->consumer->privatePerson->lastName;
-                            $email = $response->payment->consumer->privatePerson->email;
-                            $phoneNumber = $response->payment->consumer->privatePerson->phoneNumber->prefix .
-                                           $response->payment->consumer->privatePerson->phoneNumber->number;
-                       }
-                        $maskedCardNumber = $response->payment->paymentDetails->cardDetails->maskedPan;
-                        $cardPostfix = substr($maskedCardNumber, -4);
-                        if($response->payment->paymentDetails->paymentType) {
-                            $_SESSION['dibseasy_transaction'] = $_GET['paymentId'];
+
+                        if( isset($response->payment->paymentDetails->paymentType)
+                            && $response->payment->paymentDetails->paymentType ) {
+
+                            $_SESSION['dibseasy_transaction'] = $paymentId;
+                            if(isset($response->payment->consumer->company->name)) {
+                                $firstName = $response->payment->consumer->company->contactDetails->firstName;
+                                $lastName = $response->payment->consumer->company->contactDetails->lastName;
+                                $email =  $response->payment->consumer->company->contactDetails->email;
+                                $phoneNumber = $response->payment->consumer->company->contactDetails->phoneNumber->prefix .
+                                    $response->payment->consumer->company->contactDetails->phoneNumber->number;
+                            }else {
+                                $firstName = $response->payment->consumer->privatePerson->firstName;
+                                $lastName = $response->payment->consumer->privatePerson->lastName;
+                                $email = $response->payment->consumer->privatePerson->email;
+                                $phoneNumber = $response->payment->consumer->privatePerson->phoneNumber->prefix .
+                                    $response->payment->consumer->privatePerson->phoneNumber->number;
+                            }
+
+                            if($this->config->get('dibseasy_language') == 'sv-SE') {
+                                $paymentType = 'Betalnings typ';
+                                $paymentMethod = 'Betalningsmetod';
+                                $transactionId = 'Betalnings ID';
+                                $cardNumberPostfix = 'Kreditkort de sista 4 siffrorna';
+                            } else {
+                                $paymentType = 'Payment type';
+                                $paymentMethod = 'Payment Method';
+                                $transactionId = 'Payment ID';
+                                $cardNumberPostfix = 'Credit card last 4 digits';
+                            }
+
+                            $cardLast4digits = null;
+                            if (isset($response->payment->paymentDetails->cardDetails->maskedPan)
+                                && $response->payment->paymentDetails->cardDetails->maskedPan) {
+                                $cardLast4digits = substr($response->payment->paymentDetails->cardDetails->maskedPan, -4);
+                            }
+                            $transactDetails = "$transactionId: <b>{$response->payment->paymentId}</b> <br>"
+                                . "$paymentType:   <b>{$response->payment->paymentDetails->paymentType}</b> <br>"
+                                . "$paymentMethod: <b>{$response->payment->paymentDetails->paymentMethod}</b> <br>";
+                            if ($cardLast4digits) {
+                                $transactDetails .= "$cardNumberPostfix: <b>$cardLast4digits</b>";
+                            }
+
                             $res = $this->model_extension_payment_dibseasy->getCountryByIsoCode3($response->payment->consumer->shippingAddress->country);
                             $country = $res['name'];
                             $country_id = $res['country_id'];
@@ -60,22 +87,8 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                                     );
                             $orderid = substr($response->payment->orderDetails->reference, 4);
                             $this->model_extension_payment_dibseasy->setAddresses($orderid, $orderUpdate);
+
                             $this->load->model('checkout/dibseasy_order');
-                            if($this->config->get('dibseasy_language') == 'sv-SE') {
-                                $paymentType = 'Betalnings typ';
-                                $paymentMethod = 'Betalningsmetod';
-                                $transactionId = 'Betalnings ID';
-                                $cardNumberPostfix = 'Kreditkort de sista 4 siffrorna';
-                            } else {
-                                $paymentType = 'Payment type';
-                                $paymentMethod = 'Payment Method';
-                                $transactionId = 'Payment ID';
-                                $cardNumberPostfix = 'Credit card last 4 digits';
-                            }
-                            $transactDetails = "$transactionId: <b>{$response->payment->paymentId}</b> <br>"
-                                             . "$paymentType:   <b>{$response->payment->paymentDetails->paymentType}</b> <br>"
-                                             . "$paymentMethod: <b>{$response->payment->paymentDetails->paymentMethod}</b> <br>"
-                                             . "$cardNumberPostfix: <b>$cardPostfix</b>";
                             $this->model_checkout_dibseasy_order->addOrderHistory($this->session->data['order_id'], $this->config->get('dibseasy_order_status_id'), $transactDetails, true);
                             $query = $this->db->query("SELECT count(*) as count FROM " . DB_PREFIX . "order_history WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");
                             if( isset($query->row['count']) && $query->row['count'] > 1 ) {
@@ -83,12 +96,6 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                             }
                             $this->response->redirect($this->url->link('checkout/dibseasy_success', '', true));
                         } else {
-                            $this->logger->write('-===============Error during finishiong order==============-----');
-                            $this->logger->write('Transactionid: ' . $_GET['paymentId']);
-                            $this->logger->write('Order was not registered in Opencart');
-                            $this->logger->write('Orderid: ' . $this->session->data['order_id']);
-                            $this->logger->write('You can fing order details in DB table: `' . DB_PREFIX . 'order`');
-                            $this->logger->write('================================================================');
                             $this->response->redirect($this->url->link('checkout/checkout', '', true));
                         }
 		} else {
@@ -96,9 +103,63 @@ class ControllerExtensionPaymentDibseasy extends Controller {
                 }
 	}
 
+    /**
+     * confirm payment it case of hosted solution
+     *
+     */
+	public function confirmHosted() {
+        if (isset($this->session->data['payment_method']['code'])
+            && $this->session->data['payment_method']['code'] == 'dibseasy') {
+
+            $this->load->model('extension/payment/dibseasy');
+            $paymentId = $this->extractPaymentId();
+            $response = $this->model_extension_payment_dibseasy->getTransactionInfo($paymentId);
+
+            if (isset($response->payment->paymentDetails->paymentType)
+                && $response->payment->paymentDetails->paymentType) {
+                $_SESSION['dibseasy_transaction'] = $paymentId;
+                if ($this->config->get('dibseasy_language') == 'sv-SE') {
+                    $paymentType = 'Betalnings typ';
+                    $paymentMethod = 'Betalningsmetod';
+                    $transactionId = 'Betalnings ID';
+                    $cardNumberPostfix = 'Kreditkort de sista 4 siffrorna';
+                } else {
+                    $paymentType = 'Payment type';
+                    $paymentMethod = 'Payment Method';
+                    $transactionId = 'Payment ID';
+                    $cardNumberPostfix = 'Credit card last 4 digits';
+                }
+                $cardLast4digits = null;
+                if (isset($response->payment->paymentDetails->cardDetails->maskedPan)
+                    && $response->payment->paymentDetails->cardDetails->maskedPan) {
+                    $cardLast4digits = substr($response->payment->paymentDetails->cardDetails->maskedPan, -4);
+                }
+                $transactDetails = "$transactionId: <b>{$response->payment->paymentId}</b> <br>"
+                    . "$paymentType:   <b>{$response->payment->paymentDetails->paymentType}</b> <br>"
+                    . "$paymentMethod: <b>{$response->payment->paymentDetails->paymentMethod}</b> <br>";
+                if ($cardLast4digits) {
+                    $transactDetails .= "$cardNumberPostfix: <b>$cardLast4digits</b>";
+                }
+                $this->load->model('checkout/dibseasy_order');
+
+                $orderId = $this->session->data['order_id'];
+
+                $orderStatus = $this->config->get('dibseasy_order_status_id');
+
+                $this->model_checkout_dibseasy_order->addOrderHistory($orderId, $orderStatus, $transactDetails, true);
+
+                $this->response->redirect($this->url->link('checkout/dibseasy_success', '', true));
+            } else {
+                $this->response->redirect($this->url->link('checkout/checkout', '', true));
+            }
+       }
+    }
+
     public function redirect() {
         $this->load->model('extension/payment/dibseasy');
+
         $this->load->language('extension/payment/dibseasy');
+
         $paymentid = $this->model_extension_payment_dibseasy->initCheckout();
         if(!empty($paymentid)) {
             $transaction = $this->model_extension_payment_dibseasy->getTransactionInfo($paymentid);
@@ -122,4 +183,5 @@ class ControllerExtensionPaymentDibseasy extends Controller {
         }
         return $result;
     }
+
 }

@@ -673,6 +673,7 @@ class ModelExtensionPaymentDibseasy extends Model {
                 $data['checkout']['consumer'] = $consumerData;
                 $data['checkout']['merchantHandlesConsumerData'] = true;
                 $data['checkout']['integrationType'] = 'HostedPaymentPage';
+                $data['checkout']['returnUrl'] = $this->url->link('extension/payment/dibseasy/confirmhosted', '', true);
             }
 
             if($this->config->get('dibseasy_checkout_type') == 'embedded') {
