@@ -652,23 +652,26 @@ class ModelExtensionPaymentDibseasy extends Model {
 
                 $consumerData = array(
                     'email' => $email,
-                    "shippingAddress" => array(
-                        "addressLine1"=> !empty($this->session->data['shipping_address']['address_1']) ? $this->session->data['shipping_address']['address_1']: null,
-                        "addressLine2"=> !empty($this->session->data['shipping_address']['address_2']) ? $this->session->data['shipping_address']['address_2']: null,
-                        "postalCode"=> !empty($this->session->data['shipping_address']['postcode']) ? $this->session->data['shipping_address']['postcode']: null,
-                        "city"=> !empty($this->session->data['shipping_address']['city']) ? $this->session->data['shipping_address']['city']: null,
-                        "country"=> !empty($this->session->data['shipping_address']['iso_code_3']) ? $this->session->data['shipping_address']['iso_code_3']: null
-                    ),
                     'privatePerson' => array(
                         'firstName' => !empty($this->session->data['shipping_address']['firstname']) ?$this->session->data['shipping_address']['firstname']: 'FirstName',
                         'lastName' => !empty($this->session->data['shipping_address']['lastname']) ? $this->session->data['shipping_address']['lastname']: 'LastName',
                     )
                 );
 
+                $shippingAddress = array(
+                    "addressLine1"=> !empty($this->session->data['shipping_address']['address_1']) ? $this->session->data['shipping_address']['address_1']: null,
+                    "addressLine2"=> !empty($this->session->data['shipping_address']['address_2']) ? $this->session->data['shipping_address']['address_2']: null,
+                    "postalCode"=> !empty($this->session->data['shipping_address']['postcode']) ? $this->session->data['shipping_address']['postcode']: null,
+                    "city"=> !empty($this->session->data['shipping_address']['city']) ? $this->session->data['shipping_address']['city']: null,
+                    "country"=> !empty($this->session->data['shipping_address']['iso_code_3']) ? $this->session->data['shipping_address']['iso_code_3']: null
+                );
+
+                if($this->validateShippingAddress($shippingAddress)) {
+                    $consumerData['shippingAddress'] = $shippingAddress;
+                }
+
                 $data['checkout']['consumer'] = $consumerData;
-
                 $data['checkout']['merchantHandlesConsumerData'] = true;
-
                 $data['checkout']['integrationType'] = 'HostedPaymentPage';
             }
 
@@ -715,7 +718,7 @@ class ModelExtensionPaymentDibseasy extends Model {
 
             return json_encode($data);
         }
-        
+
         public function getTransactionInfo($transactionId) {
              if($this->config->get('dibseasy_testmode') == 1) {
                   $url = str_replace('{transactionId}', $transactionId, self::PAYMENT_TRANSACTION_URL_PATTERN_TEST);
@@ -838,5 +841,15 @@ class ModelExtensionPaymentDibseasy extends Model {
         }
          return $total;
     }
-       
+
+    /**
+     * @param array $shippingAddress
+     * @return bool
+     */
+    private function validateShippingAddress($shippingAddress = array()) {
+         return !empty($shippingAddress['addressLine1']) &&
+            !empty($shippingAddress['postalCode']) &&
+            !empty($shippingAddress['city']) &&
+            !empty($shippingAddress['country']);
+    }
 }
