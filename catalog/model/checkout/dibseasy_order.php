@@ -560,7 +560,7 @@ class ModelCheckoutDibseasyOrder extends Model {
 						$option_data[] = array(
 							'name'  => $option['name'],
 							'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value)
-						);text_price;
+						);
 					}
 	
 					$data['products'][] = array(
