@@ -613,7 +613,7 @@ class ModelExtensionPaymentDibseasy extends Model {
             }
 
             $orderGrandTotal = $this->getNetsIntValue( $this->formatPrice($this->getGrandTotal()));
-            if ($orderGrandTotal != $itemsPriceSumma) {
+            if (0 != bccomp( $itemsPriceSumma,  $orderGrandTotal)) {
                       $delta =  $orderGrandTotal - $itemsPriceSumma;
                       $this->products[] = array(
                           'reference' => 'rounding',
@@ -809,14 +809,14 @@ class ModelExtensionPaymentDibseasy extends Model {
     }
 
     private function getNetsIntValue($value) {
-        $return = (int)($value * 10000)/100;
+        $return = ($value * 10000) / 100;
         return $return;
     }
 
     private function format($number, $currency, $value = '', $format = true) {
         $decimal_place = $this->currency->getDecimalPlace($currency);
         if(empty($decimal_place)) {
-            $decimal_place = 2;
+            $decimal_place = 0;
         }
         if (!$value) {
             $value = $this->currency->getValue($currency);
