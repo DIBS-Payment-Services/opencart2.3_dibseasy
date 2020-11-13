@@ -716,7 +716,6 @@ class ModelExtensionPaymentDibseasy extends Model {
                    $this->logger->write("Collected data:");
                    $this->logger->write($data);
             }
-
             return json_encode($data);
         }
 
@@ -809,8 +808,8 @@ class ModelExtensionPaymentDibseasy extends Model {
     }
 
     private function getNetsIntValue($value) {
-        $return = ($value * 10000) / 100;
-        return $return;
+        $return = round($value, 2) * 100;;
+        return (int)$return;
     }
 
     private function format($number, $currency, $value = '', $format = true) {
