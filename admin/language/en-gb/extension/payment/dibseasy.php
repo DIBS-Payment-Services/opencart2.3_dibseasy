@@ -4,8 +4,8 @@ $_['heading_title']	= 'Nets Easy Checkout';
 
 // Text
 $_['text_extension'] = 'Extensions';
-$_['text_success'] = 'Success: You have modified DIBS Easy payment module!';
-$_['text_edit'] = 'Edit Dibs Easy';
+$_['text_success'] = 'Success: You have modified Nets Easy payment module!';
+$_['text_edit'] = 'Edit Nets Easy';
 $_['text_dibseasy'] = '<a href= "http://www.dibs.se/" target="_blank"><img alt="Dibs" src="view/image/payment/dibs.png" style="width: 86px; height: 30px;"></a>';
 
 // Entry
@@ -43,7 +43,7 @@ $_['text_b2b_b2c_b2b']    = 'B2B and B2C default to B2B';
 $_['help_total'] = 'The checkout total the order must reach before this payment method becomes active.';
 
 // Error
-$_['entry_dibseasy_merchant'] = 'DIBS Merchant ID';
+$_['entry_dibseasy_merchant'] = 'Nets Merchant ID';
 $_['entry_dibseasy_checkoutkey'] = 'Checkout key';
 $_['entry_dibseasy_checkoutk_live'] = 'Checkout key';
 $_['entry_shipping_method'] = 'Shipping method:';
@@ -54,3 +54,7 @@ $_['checkout_key'] = 'Checkout key is required';
 $_['free_shipping_disabled'] = 'Free shipping is disabled, please enable it first';
 $_['entry_dibseasy_livekey_error'] = 'Please fill live secret key';
 $_['entry_dibseasy_testkey_error'] = 'Please fill test secret key';
+$_['entry_dibseasy_merchant_terms_and_conditions'] = 'Merchant Terms & conditions';
+$_['entry_merchant_term_and_conditions_error'] = 'Please add merchant terms and conditions';
+$_['entry_autocapture'] = 'Auto Capture';
+

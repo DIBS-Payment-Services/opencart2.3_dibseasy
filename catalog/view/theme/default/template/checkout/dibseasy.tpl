@@ -30,10 +30,9 @@
       <div class="panel-group" id="accordion">
           
      <div class="panel panel-default">
-          <div class="panel-heading">
+          <!--<div class="panel-heading">
             <h4 class="panel-title"><?php echo $text_checkout_option; ?></h4>
-           
-          </div>
+          </div>-->
             <div class="table-responsive">
               <table class="table table-bordered table-hover">
                 <thead>
@@ -75,18 +74,26 @@
                 </tbody>
                 <tfoot>
                   <?php foreach ($totals as $total) { ?>
-                  <tr>
+                  <!--<tr>
                     <td colspan="4" class="text-right"><strong><?php echo $total['title']; ?>:</strong></td>
                     <td class="text-right"><?php echo $total['text']; ?></td>
-                  </tr>
+                  </tr>-->
+                 
                   <?php } ?>
+                  
                 </tfoot>
               </table>
             </div>
         </div>
-        <?php if($paymentId) { ?>
-            <div id="dibs-complete-checkout"></div>
-        <?php } ?>
+       <br>
+        <div id="dibs-easy-controls"></div>
+        <div id="dibs-easy-window">
+             <?php if($paymentId) { ?>
+                <div id="dibs-complete-checkout"></div>
+              <?php } ?>
+        </div>
+        <div style="clear:both;"></div>
+        
       </div>
       <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>
@@ -101,7 +108,15 @@
 	   };
 	  var checkout = new Dibs.Checkout(checkoutOptions);
           console.log(checkoutOptions);
-	  //this is the event that the merchant should listen to redirect to the “payment-is-ok” page
+	  //this is the event that the merchant should listen to redirect to the â€œpayment-is-okâ€� page
+                checkout.on('pay-initialized', function(response) {
+                   //if($('#nets-checkout-iframe').contents().closest('.card-input').val() ){
+                       //$('.dibs-easy-shipping-selector').attr('onclick','javascript:void()'); 
+                   //}
+                   $('.dibs-easy-shipping-selector').attr('onclick','javascript:void()'); 
+                   checkout.send('payment-order-finalized', true);
+                   
+                });
                 checkout.on('payment-completed', function(response) {
                        /*
                        Response:
@@ -144,4 +159,22 @@
 			}
 		});
             };
+            
+ updateView({'action':'start'});
+
+      function updateView (params) {
+          ct = this;
+          ct.checkout.freezeCheckout();
+          
+          $.post('index.php?route=checkout/dibseasy/updateview', params ,function() {
+          }).done(function(result) {
+            var result = JSON.parse(result);
+            
+            if(result.exception == 1) {
+                //window.location.href = '<?php echo $checkout_url; ?>';
+            }
+            $('#dibs-easy-controls').html(result.outputHtml);
+            ct.checkout.thawCheckout();
+       });
+    }
 </script>
